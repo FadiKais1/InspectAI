@@ -1,0 +1,50 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+pip-wheel-metadata/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Secrets and local env
+.env
+.env.*
+
+# Local datasets (keep directory placeholders)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# Generated figures
+outputs/figures/*
+!outputs/figures/.gitkeep
+
+# Checkpoints
+outputs/checkpoints/*
+!outputs/checkpoints/.gitkeep
+
+# Experiment outputs
+outputs/experiments/*
+!outputs/experiments/.gitkeep
+
+# Tooling / OS
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.DS_Store
+Thumbs.db
