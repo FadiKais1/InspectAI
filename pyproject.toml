@@ -10,6 +10,12 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "Fadi Kais" }]
+dependencies = [
+    "pandas",
+    "numpy",
+    "Pillow",
+    "matplotlib",
+]
 
 [project.optional-dependencies]
 dev = ["pytest", "ruff"]

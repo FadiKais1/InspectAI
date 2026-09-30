@@ -8,9 +8,10 @@ system built around PyTorch computer-vision models.
 
 ## Current status
 
-This repository is a **scaffold only**. There are no trained models, dataset
-loaders, APIs, or dashboards yet. Reusable library code lives under
-`src/inspectai`; notebooks are reserved for EDA, visualization, and analysis.
+The repository is a src-layout scaffold plus transistor EDA
+(`notebooks/01_mvtec_eda.ipynb`). There are no trained models, dataset
+loaders, APIs, or dashboards yet. Reusable library code belongs under
+`src/inspectai`; notebooks are for EDA, visualization, and analysis.
 
 ## Planned direction
 
@@ -38,4 +39,5 @@ data/processed/         Derived local artifacts (not committed)
 outputs/                Figures, checkpoints, experiment runs
 ```
 
-Requires Python 3.11 or newer. Runtime ML dependencies are not declared yet.
+Requires Python 3.11 or newer. Declared runtime packages are pandas, NumPy,
+Pillow, and Matplotlib for EDA. PyTorch is not added yet.
