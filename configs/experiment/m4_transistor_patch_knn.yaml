@@ -1,0 +1,37 @@
+# Milestone 4 experiment contract.
+# Hyperparameters below are locked a priori (EDA + compute). Do not retune on test AUROC.
+
+name: m4_transistor_patch_knn
+category: transistor
+split_train: train
+split_test: test
+
+hypothesis: >
+  Frozen pretrained patch-level visual features will detect and localize
+  subtle transistor defects better than a reconstruction-based baseline,
+  especially small lead defects.
+
+baseline: >
+  Frozen ImageNet-pretrained encoder, intermediate patch features, memory
+  bank from train/good only, test scores via nearest-neighbor distance.
+  Simple kNN; random memory cap only if runtime requires it (not coreset
+  tuned on test). Reconstruction AE is the later comparison family, not
+  this run.
+
+metrics:
+  - image_auroc_overall
+  - image_auroc_per_defect
+  - pixel_auroc
+  - qualitative_overlays
+
+# A priori (not selected by scanning the test set)
+backbone: resnet18
+imagenet_weights: IMAGENET1K_V1
+feature_layer: layer3
+input_size: 512
+k_neighbors: 1
+max_memory_patches: 50000
+memory_sample_seed: 42
+image_score: spatial_max
+imagenet_normalize: true
+device: cpu
