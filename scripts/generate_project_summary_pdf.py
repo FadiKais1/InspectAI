@@ -59,7 +59,6 @@ def write_pdf(pages: list[Page], path: Path) -> None:
         return len(objects)
 
     add("<< /Type /Catalog /Pages 2 0 R >>")
-    kids = []
     content_ids = []
 
     # fonts
@@ -258,24 +257,32 @@ def build() -> list[Page]:
     blocks = [
         (
             "Embedding / memory-bank (primary AD path)",
-            "Wide-ResNet or similar frozen ImageNet backbone, patch-level memory (PatchCore-style). "
-            "Fits MVTec one-class training and small defects if patches stay high-resolution. "
-            "Typically little or no gradient training; scoring is nearest-neighbor distance in feature space.",
+            (
+                "Wide-ResNet or similar frozen ImageNet backbone, patch-level memory (PatchCore-style). "
+                "Fits MVTec one-class training and small defects if patches stay high-resolution. "
+                "Typically little or no gradient training; scoring is nearest-neighbor distance in feature space."
+            ),
         ),
         (
             "Reconstruction (comparison baseline)",
-            "Convolutional autoencoder trained on good images only. Residual maps as anomaly scores. "
-            "Useful as a baseline; often weaker on fine lead defects than patch embeddings.",
+            (
+                "Convolutional autoencoder trained on good images only. Residual maps as anomaly scores. "
+                "Useful as a baseline; often weaker on fine lead defects than patch embeddings."
+            ),
         ),
         (
             "Self-supervised features (optional, after baseline)",
-            "DINO / ViT features instead of a supervised CNN, same memory-bank head. "
-            "Only after a working PatchCore-style baseline exists.",
+            (
+                "DINO / ViT features instead of a supervised CNN, same memory-bank head. "
+                "Only after a working PatchCore-style baseline exists."
+            ),
         ),
         (
             "Detection (optional, not the default)",
-            "YOLO-style detectors need box labels. MVTec AD is one-class segmentation. "
-            "Use YOLO only if the problem shifts to boxed detection, as a separate experiment.",
+            (
+                "YOLO-style detectors need box labels. MVTec AD is one-class segmentation. "
+                "Use YOLO only if the problem shifts to boxed detection, as a separate experiment."
+            ),
         ),
     ]
     for title, para in blocks:
