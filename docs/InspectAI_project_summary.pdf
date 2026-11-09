@@ -1,0 +1,232 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [ 5 0 R 7 0 R 9 0 R 11 0 R 13 0 R ] /Count 5 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 2252 >>
+stream
+0.060 0.150 0.270 rg 0.0 820.0 595.0 22.0 re f
+0.060 0.150 0.270 rg 0.0 0.0 595.0 28.0 re f
+BT /F1 8 Tf 36.0 10.0 Td (InspectAI  |  portfolio roadmap  |  Python 3.11  |  PyTorch planned) Tj ET
+BT /F2 26 Tf 40.0 790.0 Td (InspectAI) Tj ET
+BT /F1 12 Tf 40.0 768.0 Td (Industrial visual anomaly detection  -  project summary) Tj ET
+BT /F1 10 Tf 40.0 740.0 Td (A research-oriented Python package for MVTec-style quality inspection. Long-term goal: a) Tj ET
+BT /F1 10 Tf 40.0 726.0 Td (defensible portfolio system that can later support real-time inference. This PDF describes) Tj ET
+BT /F1 10 Tf 40.0 712.0 Td (architecture, milestones, and planned deep-learning parts. No model has been trained yet.) Tj ET
+BT /F1 10 Tf 40.0 698.0 Td (Dataset numbers below are EDA facts, not experiment scores.) Tj ET
+BT /F2 16 Tf 40.0 674.0 Td (Current status \(done\)) Tj ET
+1.6 w 0.120 0.440 0.550 RG 40.0 666.0 m 555.0 666.0 l S
+BT /F1 10 Tf 44.0 646.0 Td (? Python 3.11 src-layout package \(inspectai\) with pytest and Ruff.) Tj ET
+BT /F1 10 Tf 44.0 628.0 Td (? Milestone 1: transistor EDA notebook; data/raw/ is read-only.) Tj ET
+BT /F1 10 Tf 44.0 610.0 Td (? Milestone 2: framework-independent MVTecDataset \(NumPy/Pillow, no PyTorch\).) Tj ET
+BT /F1 10 Tf 44.0 592.0 Td (? Train = normals only; test discovers defect folders; masks uint8 {0,1}; native 1024x1024.) Tj ET
+BT /F1 10 Tf 44.0 574.0 Td (? Unit tests on fake trees plus transistor integration tests \(skip if data missing\).) Tj ET
+BT /F2 16 Tf 40.0 550.0 Td (Immediate next step) Tj ET
+1.6 w 0.120 0.440 0.550 RG 40.0 542.0 m 555.0 542.0 l S
+BT /F2 11 Tf 40.0 522.0 Td (Milestone 3  -  PyTorch adapter and experiment contract \(not modeling yet\).) Tj ET
+BT /F1 10 Tf 44.0 502.0 Td (? Install PyTorch as an explicit, approved dependency.) Tj ET
+BT /F1 10 Tf 44.0 484.0 Td (? Add a thin torch.utils.data.Dataset wrapper around MVTecDataset \(CHW tensors\).) Tj ET
+BT /F1 10 Tf 44.0 466.0 Td (? Do not introduce aggressive resize that would hide small transistor lead defects.) Tj ET
+BT /F1 10 Tf 44.0 448.0 Td (? Write hypothesis, baseline, and metrics before any training run \(AGENTS.md\).) Tj ET
+BT /F1 10 Tf 44.0 430.0 Td (? The first model experiment is Milestone 4, after the adapter lands.) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 2005 >>
+stream
+0.060 0.150 0.270 rg 0.0 820.0 595.0 22.0 re f
+0.060 0.150 0.270 rg 0.0 0.0 595.0 28.0 re f
+BT /F1 8 Tf 36.0 10.0 Td (InspectAI  |  repository parts) Tj ET
+BT /F2 16 Tf 40.0 790.0 Td (Repository parts) Tj ET
+1.6 w 0.120 0.440 0.550 RG 40.0 782.0 m 555.0 782.0 l S
+BT /F2 9 Tf 40.0 762.0 Td (src/inspectai/data/) Tj ET
+BT /F1 10 Tf 48.0 749.0 Td (MVTec loading, pairing, validation, paired-transform hook. Implemented.) Tj ET
+BT /F2 9 Tf 40.0 730.0 Td (src/inspectai/models/) Tj ET
+BT /F1 10 Tf 48.0 717.0 Td (PyTorch modules. Empty. Planned AE / PatchCore backbone / later detectors.) Tj ET
+BT /F2 9 Tf 40.0 698.0 Td (src/inspectai/evaluation/) Tj ET
+BT /F1 10 Tf 48.0 685.0 Td (Image/pixel AUROC, PRO, thresholds, pass/fail. Planned.) Tj ET
+BT /F2 9 Tf 40.0 666.0 Td (src/inspectai/visualization/) Tj ET
+BT /F1 10 Tf 48.0 653.0 Td (Overlays and score maps. Helpers still live in the EDA notebook.) Tj ET
+BT /F2 9 Tf 40.0 634.0 Td (src/inspectai/inference/) Tj ET
+BT /F1 10 Tf 48.0 621.0 Td (Single-image, batch, later stream scoring. Planned.) Tj ET
+BT /F2 9 Tf 40.0 602.0 Td (src/inspectai/utils/) Tj ET
+BT /F1 10 Tf 48.0 589.0 Td (Seed, paths, logging. Minimal later.) Tj ET
+BT /F2 9 Tf 40.0 570.0 Td (configs/) Tj ET
+BT /F1 10 Tf 48.0 557.0 Td (data / model / experiment YAML. Placeholders only.) Tj ET
+BT /F2 9 Tf 40.0 538.0 Td (notebooks/) Tj ET
+BT /F1 10 Tf 48.0 525.0 Td (EDA and analysis only. 01_mvtec_eda.ipynb exists.) Tj ET
+BT /F2 9 Tf 40.0 506.0 Td (scripts/) Tj ET
+BT /F1 10 Tf 48.0 493.0 Td (Thin CLIs \(train, eval, infer\) calling the package. Planned.) Tj ET
+BT /F2 9 Tf 40.0 474.0 Td (tests/) Tj ET
+BT /F1 10 Tf 48.0 461.0 Td (Package smoke plus MVTec unit/integration. Implemented.) Tj ET
+BT /F2 9 Tf 40.0 442.0 Td (data/raw/) Tj ET
+BT /F1 10 Tf 48.0 429.0 Td (Immutable MVTec AD. Transistor: 213 train good, 60 test good, 40 anomalous.) Tj ET
+BT /F2 9 Tf 40.0 410.0 Td (outputs/) Tj ET
+BT /F1 10 Tf 48.0 397.0 Td (figures, checkpoints, experiment logs \(gitignored contents\).) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 3159 >>
+stream
+0.060 0.150 0.270 rg 0.0 820.0 595.0 22.0 re f
+0.060 0.150 0.270 rg 0.0 0.0 595.0 28.0 re f
+BT /F1 8 Tf 36.0 10.0 Td (InspectAI  |  roadmap) Tj ET
+BT /F2 16 Tf 40.0 790.0 Td (Roadmap to a complete portfolio project) Tj ET
+1.6 w 0.120 0.440 0.550 RG 40.0 782.0 m 555.0 782.0 l S
+BT /F2 9 Tf 40.0 762.0 Td (Stage) Tj ET
+BT /F2 9 Tf 150.0 762.0 Td (State) Tj ET
+BT /F2 9 Tf 220.0 762.0 Td (Scope) Tj ET
+0.6 w 0.800 0.840 0.880 RG 40.0 754.0 m 555.0 754.0 l S
+BT /F2 10 Tf 40.0 746.0 Td (M1 EDA) Tj ET
+BT /F2 9 Tf 150.0 746.0 Td (DONE) Tj ET
+BT /F1 9 Tf 220.0 746.0 Td (Understand transistor: imbalance, tiny leads, 1024px, mask) Tj ET
+BT /F1 9 Tf 220.0 734.0 Td (pairing.) Tj ET
+BT /F2 10 Tf 40.0 714.0 Td (M2 Data API) Tj ET
+BT /F2 9 Tf 150.0 714.0 Td (DONE) Tj ET
+BT /F1 9 Tf 220.0 714.0 Td (MVTecDataset + MVTecSample; split-specific validation;) Tj ET
+BT /F1 9 Tf 220.0 702.0 Td (tests.) Tj ET
+BT /F2 10 Tf 40.0 682.0 Td (M3 Torch adapter) Tj ET
+BT /F2 9 Tf 150.0 682.0 Td (NEXT) Tj ET
+BT /F1 9 Tf 220.0 682.0 Td (Install torch; Dataset wrapper; DataLoader smoke; no) Tj ET
+BT /F1 9 Tf 220.0 670.0 Td (training.) Tj ET
+BT /F2 10 Tf 40.0 650.0 Td (M4 Baseline AD) Tj ET
+BT /F2 9 Tf 150.0 650.0 Td (PLANNED) Tj ET
+BT /F1 9 Tf 220.0 650.0 Td (Hypothesis + metrics first. Frozen encoder + kNN/coreset) Tj ET
+BT /F1 9 Tf 220.0 638.0 Td (or similar.) Tj ET
+BT /F2 10 Tf 40.0 618.0 Td (M5 Strong AD) Tj ET
+BT /F2 9 Tf 150.0 618.0 Td (PLANNED) Tj ET
+BT /F1 9 Tf 220.0 618.0 Td (Memory-bank method \(PatchCore-style\) at high resolution or) Tj ET
+BT /F1 9 Tf 220.0 606.0 Td (patches.) Tj ET
+BT /F2 10 Tf 40.0 586.0 Td (M6 Second family) Tj ET
+BT /F2 9 Tf 150.0 586.0 Td (PLANNED) Tj ET
+BT /F1 9 Tf 220.0 586.0 Td (Reconstruction autoencoder for comparison, not as the only) Tj ET
+BT /F1 9 Tf 220.0 574.0 Td (model.) Tj ET
+BT /F2 10 Tf 40.0 554.0 Td (M7 Evaluation) Tj ET
+BT /F2 9 Tf 150.0 554.0 Td (PLANNED) Tj ET
+BT /F1 9 Tf 220.0 554.0 Td (Image AUROC, pixel AUROC, PRO; per-defect tables; no) Tj ET
+BT /F1 9 Tf 220.0 542.0 Td (invented scores.) Tj ET
+BT /F2 10 Tf 40.0 522.0 Td (M8 Categories) Tj ET
+BT /F2 9 Tf 150.0 522.0 Td (PLANNED) Tj ET
+BT /F1 9 Tf 220.0 522.0 Td (Same pipeline on more MVTec classes; configs per) Tj ET
+BT /F1 9 Tf 220.0 510.0 Td (experiment.) Tj ET
+BT /F2 10 Tf 40.0 490.0 Td (M9 Inference CLI) Tj ET
+BT /F2 9 Tf 150.0 490.0 Td (PLANNED) Tj ET
+BT /F1 9 Tf 220.0 490.0 Td (scripts/infer.py: image in, score + overlay out.) Tj ET
+BT /F2 10 Tf 40.0 470.0 Td (M10 Optional product) Tj ET
+BT /F2 9 Tf 150.0 470.0 Td (LATER) Tj ET
+BT /F1 9 Tf 220.0 470.0 Td (Stream/API/dashboard only after models and eval are) Tj ET
+BT /F1 9 Tf 220.0 458.0 Td (documented.) Tj ET
+BT /F2 16 Tf 40.0 430.0 Td (Definition of done \(core project\)) Tj ET
+1.6 w 0.120 0.440 0.550 RG 40.0 422.0 m 555.0 422.0 l S
+BT /F1 10 Tf 40.0 402.0 Td (Reproducible train/eval on transistor; at least two model families compared with the same) Tj ET
+BT /F1 10 Tf 40.0 388.0 Td (metrics; written limitations \(small defects, resize risk\); documented inference path. A) Tj ET
+BT /F1 10 Tf 40.0 374.0 Td (real-time UI is extra, not required for the research portfolio core.) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 12 0 R >>
+endobj
+12 0 obj
+<< /Length 2620 >>
+stream
+0.060 0.150 0.270 rg 0.0 820.0 595.0 22.0 re f
+0.060 0.150 0.270 rg 0.0 0.0 595.0 28.0 re f
+BT /F1 8 Tf 36.0 10.0 Td (InspectAI  |  planned models and DL parts) Tj ET
+BT /F2 16 Tf 40.0 790.0 Td (Planned models and deep-learning parts) Tj ET
+1.6 w 0.120 0.440 0.550 RG 40.0 782.0 m 555.0 782.0 l S
+BT /F1 10 Tf 40.0 762.0 Td (None of the following are implemented. They are the intended stack after Milestone 3.) Tj ET
+BT /F2 11 Tf 40.0 738.0 Td (Embedding / memory-bank \(primary AD path\)) Tj ET
+BT /F1 10 Tf 44.0 722.0 Td (Wide-ResNet or similar frozen ImageNet backbone, patch-level memory \(PatchCore-style\). Fits) Tj ET
+BT /F1 10 Tf 44.0 709.0 Td (MVTec one-class training and small defects if patches stay high-resolution. Typically little) Tj ET
+BT /F1 10 Tf 44.0 696.0 Td (or no gradient training; scoring is nearest-neighbor distance in feature space.) Tj ET
+BT /F2 11 Tf 40.0 673.0 Td (Reconstruction \(comparison baseline\)) Tj ET
+BT /F1 10 Tf 44.0 657.0 Td (Convolutional autoencoder trained on good images only. Residual maps as anomaly scores.) Tj ET
+BT /F1 10 Tf 44.0 644.0 Td (Useful as a baseline; often weaker on fine lead defects than patch embeddings.) Tj ET
+BT /F2 11 Tf 40.0 621.0 Td (Self-supervised features \(optional, after baseline\)) Tj ET
+BT /F1 10 Tf 44.0 605.0 Td (DINO / ViT features instead of a supervised CNN, same memory-bank head. Only after a working) Tj ET
+BT /F1 10 Tf 44.0 592.0 Td (PatchCore-style baseline exists.) Tj ET
+BT /F2 11 Tf 40.0 569.0 Td (Detection \(optional, not the default\)) Tj ET
+BT /F1 10 Tf 44.0 553.0 Td (YOLO-style detectors need box labels. MVTec AD is one-class segmentation. Use YOLO only if) Tj ET
+BT /F1 10 Tf 44.0 540.0 Td (the problem shifts to boxed detection, as a separate experiment.) Tj ET
+BT /F2 16 Tf 40.0 517.0 Td (DL system pieces \(engineering, not architectures\)) Tj ET
+1.6 w 0.120 0.440 0.550 RG 40.0 509.0 m 555.0 509.0 l S
+BT /F1 10 Tf 44.0 489.0 Td (? Data: MVTecDataset -> later tensor Dataset -> DataLoader. Paired \(image, mask\)) Tj ET
+BT /F1 10 Tf 56.0 475.0 Td (transforms.) Tj ET
+BT /F1 10 Tf 44.0 457.0 Td (? Train: good-only; no defect labels in the one-class setting.) Tj ET
+BT /F1 10 Tf 44.0 439.0 Td (? Score: distance to memory bank, or reconstruction error \(AE path\).) Tj ET
+BT /F1 10 Tf 44.0 421.0 Td (? Eval: image AUROC; pixel AUROC / PRO vs binary masks; per-defect breakdown.) Tj ET
+BT /F1 10 Tf 44.0 403.0 Td (? Inference: anomaly map + scalar; threshold pass/fail; overlay visualization.) Tj ET
+BT /F1 10 Tf 44.0 385.0 Td (? Ops: experiment YAML, seeds, checkpoints under outputs/; never invent metrics.) Tj ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 14 0 R >>
+endobj
+14 0 obj
+<< /Length 2224 >>
+stream
+0.060 0.150 0.270 rg 0.0 820.0 595.0 22.0 re f
+0.060 0.150 0.270 rg 0.0 0.0 595.0 28.0 re f
+BT /F1 8 Tf 36.0 10.0 Td (InspectAI  |  constraints and experiment contract) Tj ET
+BT /F2 16 Tf 40.0 790.0 Td (Transistor constraints that shape the DL design) Tj ET
+1.6 w 0.120 0.440 0.550 RG 40.0 782.0 m 555.0 782.0 l S
+BT /F1 10 Tf 44.0 762.0 Td (? One-class: 213 train good, 60 test good, 10 images x 4 defect types \(40 anomalous\).) Tj ET
+BT /F1 10 Tf 44.0 744.0 Td (? All RGB images and masks 1024x1024 PNG; masks pair 1:1 with defects.) Tj ET
+BT /F1 10 Tf 44.0 726.0 Td (? bent_lead / cut_lead can be well under 2% of pixels; 224px resize can erase them.) Tj ET
+BT /F1 10 Tf 44.0 708.0 Td (? misplaced is pose of the whole part \(~40% of pixels\), not a local nick.) Tj ET
+BT /F1 10 Tf 44.0 690.0 Td (? Good leads already curve into the board; bent_lead is extreme displacement.) Tj ET
+BT /F1 10 Tf 44.0 672.0 Td (? Default: native resolution or high-res patches until an experiment justifies resize.) Tj ET
+BT /F2 16 Tf 40.0 646.0 Td (Experiment contract \(before any training\)) Tj ET
+1.6 w 0.120 0.440 0.550 RG 40.0 638.0 m 555.0 638.0 l S
+BT /F1 10 Tf 44.0 618.0 Td (? Hypothesis, e.g. patch embeddings at native scale beat an autoencoder on lead defects.) Tj ET
+BT /F1 10 Tf 44.0 600.0 Td (? Baseline: simple frozen-encoder kNN or AE, not a random score.) Tj ET
+BT /F1 10 Tf 44.0 582.0 Td (? Metrics: image AUROC overall and per defect; pixel AUROC; qualitative overlays.) Tj ET
+BT /F1 10 Tf 44.0 564.0 Td (? Split: official MVTec train/test only; never mix test defects into train.) Tj ET
+BT /F1 10 Tf 44.0 546.0 Td (? Report failures, especially tiny leads vs large misplaced regions.) Tj ET
+BT /F2 16 Tf 40.0 520.0 Td (Out of scope until explicitly approved) Tj ET
+1.6 w 0.120 0.440 0.550 RG 40.0 512.0 m 555.0 512.0 l S
+BT /F1 10 Tf 44.0 492.0 Td (? Training loops, PatchCore/DINO/YOLO implementations, APIs, and dashboards.) Tj ET
+BT /F1 10 Tf 44.0 474.0 Td (? Any modification of files under data/raw/.) Tj ET
+BT /F1 10 Tf 44.0 456.0 Td (? Reusable training logic inside notebooks.) Tj ET
+BT /F2 11 Tf 40.0 426.0 Td (Next action: approve Milestone 3 \(PyTorch adapter only\), then define the M4 hypothesis.) Tj ET
+endstream
+endobj
+xref
+0 15
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000143 00000 n 
+0000000213 00000 n 
+0000000288 00000 n 
+0000000424 00000 n 
+0000002728 00000 n 
+0000002864 00000 n 
+0000004921 00000 n 
+0000005058 00000 n 
+0000008270 00000 n 
+0000008408 00000 n 
+0000011081 00000 n 
+0000011219 00000 n 
+trailer << /Size 15 /Root 1 0 R >>
+startxref
+13496
+%%EOF
