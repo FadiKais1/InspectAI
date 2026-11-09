@@ -39,5 +39,6 @@ data/processed/         Derived local artifacts (not committed)
 outputs/                Figures, checkpoints, experiment runs
 ```
 
-Requires Python 3.11 or newer. Declared runtime packages are pandas, NumPy,
-Pillow, and Matplotlib for EDA. PyTorch is not added yet.
+Requires Python 3.11 or newer. Runtime packages are pandas, NumPy, Pillow, and
+Matplotlib. PyTorch is an optional extra (``pip install inspectai[torch]``) used
+by the thin ``MVTecTorchDataset`` adapter; it is not required for NumPy loading.
