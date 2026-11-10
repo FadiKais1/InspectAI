@@ -1,0 +1,32 @@
+# Milestone 6 experiment contract.
+# Locked before official test evaluation. Do not retune on test AUROC.
+
+name: m6_transistor_patchcore
+category: transistor
+
+hypothesis: >
+  A multi-scale PatchCore-style representation using intermediate frozen
+  CNN features and a representative coreset memory will preserve local
+  detail better than the single-layer random-memory patch-kNN baseline,
+  potentially improving pixel-level localization while maintaining strong
+  image-level anomaly detection.
+
+comparison: >
+  M4: ResNet18 layer3 only + random memory (50k).
+  M6: ResNet18 layer2+layer3 aligned concat + greedy coreset (10k).
+
+backbone: resnet18
+imagenet_weights: IMAGENET1K_V1
+frozen: true
+feature_layers:
+  - layer2
+  - layer3
+input_size: 512
+k_neighbors: 1
+max_memory_patches: 10000
+seed: 42
+image_score: spatial_max
+coreset: greedy_farthest_point
+projection_dim: 128
+projection: gaussian
+interpolation: bilinear

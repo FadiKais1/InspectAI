@@ -6,10 +6,18 @@ from inspectai.models.patch_knn import (
     PatchKNNConfig,
     PatchKNNScorer,
 )
+from inspectai.models.patchcore import (
+    FrozenResNetMultiScaleEncoder,
+    PatchCoreConfig,
+    PatchCoreScorer,
+)
 
 __all__ = [
     "ConvAutoencoder",
+    "FrozenResNetMultiScaleEncoder",
     "FrozenResNetPatchEncoder",
+    "PatchCoreConfig",
+    "PatchCoreScorer",
     "PatchKNNConfig",
     "PatchKNNScorer",
 ]
