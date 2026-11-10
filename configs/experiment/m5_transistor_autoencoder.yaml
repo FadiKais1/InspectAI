@@ -1,0 +1,43 @@
+# Milestone 5 experiment contract.
+# Locked before official test evaluation. Do not retune on test AUROC.
+
+name: m5_transistor_autoencoder
+category: transistor
+
+hypothesis: >
+  A convolutional autoencoder trained only on normal transistor images
+  will reconstruct normal structures better than anomalous structures.
+  Pixel reconstruction error can therefore act as an anomaly map.
+  This simple reconstruction baseline may be weaker than the frozen
+  patch-feature method because an autoencoder can sometimes also
+  reconstruct anomalous structures.
+
+# Data
+train_split: train
+test_split: test
+train_fraction: 0.8
+seed: 42
+
+# Model-specific preprocessing (MVTecDataset stays native-resolution)
+input_size: 256
+image_dtype: float32
+image_range: [0, 1]
+mask_resize: nearest
+
+# Architecture
+model: conv_autoencoder
+pretrained: false
+skip_connections: false
+final_activation: sigmoid
+loss: mse
+
+# Training (normal validation images only)
+optimizer: adam
+learning_rate: 0.001
+batch_size: 8
+max_epochs: 30
+patience: 5
+
+# Scoring (fixed a priori)
+image_score: spatial_max
+anomaly_map: mse_across_rgb
