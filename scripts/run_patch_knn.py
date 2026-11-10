@@ -22,9 +22,14 @@ def main() -> None:
     args = parser.parse_args()
     metrics = run_patch_knn(args.root, args.category, args.output, config=PatchKNNConfig())
     out_json = args.output / "metrics.json"
-    out_json.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    if out_json.is_file():
+        print(f"left existing {out_json} unchanged")
+    else:
+        out_json.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+        print(f"wrote {out_json}")
     print(json.dumps(metrics, indent=2))
-    print(f"wrote {out_json}")
+    print(f"wrote {args.output / 'scores.csv'}")
+    print(f"wrote {args.output / 'analysis'}")
 
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import csv
 from pathlib import Path
 
 import numpy as np
@@ -9,6 +10,10 @@ import torch
 
 from inspectai.data.mvtec import MVTecDataset
 from inspectai.data.torch_dataset import MVTecTorchDataset
+from inspectai.evaluation.case_selection import (
+    flatten_selection,
+    select_analysis_indices,
+)
 from inspectai.evaluation.metrics import binary_auroc, image_auroc_per_group
 from inspectai.models.patch_knn import (
     FrozenResNetPatchEncoder,
@@ -16,6 +21,7 @@ from inspectai.models.patch_knn import (
     PatchKNNScorer,
 )
 from inspectai.visualization.overlays import anomaly_overlay, save_rgb
+from inspectai.visualization.panels import analysis_filename, save_four_panel
 
 
 def _uint8_hwc(image_chw: torch.Tensor) -> np.ndarray:
@@ -52,6 +58,8 @@ def run_patch_knn(
     groups: list[str] = []
     maps: list[np.ndarray] = []
     rgb_images: list[np.ndarray] = []
+    gt_masks: list[np.ndarray] = []
+    image_paths: list[str] = []
     pixel_scores: list[np.ndarray] = []
     pixel_masks: list[np.ndarray] = []
 
@@ -64,6 +72,8 @@ def run_patch_knn(
         groups.append(str(item["defect_type"]))
         maps.append(score_map)
         rgb_images.append(_uint8_hwc(item["image"]))
+        gt_masks.append(item["mask"].cpu().numpy())
+        image_paths.append(str(item["image_path"]))
         pixel_scores.append(score_map.ravel())
         pixel_masks.append(item["mask"].cpu().numpy().ravel())
 
@@ -98,5 +108,48 @@ def run_patch_knn(
         name = f"{saved:02d}_{g[idx]}_{int(y[idx])}.png"
         blended = anomaly_overlay(rgb_images[idx], maps[idx])
         save_rgb(overlay_dir / name, blended)
+
+    csv_path = output_dir / "scores.csv"
+    with csv_path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=["image_path", "defect_type", "label", "anomaly_score"],
+        )
+        writer.writeheader()
+        for path, defect, label, score in zip(image_paths, groups, labels, image_scores, strict=True):
+            writer.writerow(
+                {
+                    "image_path": path,
+                    "defect_type": defect,
+                    "label": int(label),
+                    "anomaly_score": float(score),
+                }
+            )
+
+    analysis_root = output_dir / "analysis"
+    selected = select_analysis_indices(y, g, s)
+    bucket_dirs = {
+        "per_defect": analysis_root / "per_defect",
+        "high_score_good": analysis_root / "high_score_good",
+        "low_score_defect": analysis_root / "low_score_defect",
+    }
+    for bucket, tag, idx in flatten_selection(selected):
+        fname = analysis_filename(
+            defect_type=groups[idx],
+            label=int(labels[idx]),
+            score=float(image_scores[idx]),
+            image_path=image_paths[idx],
+        )
+        title = (
+            f"{tag} | {groups[idx]} | label={int(labels[idx])} | "
+            f"score={image_scores[idx]:.4f} | {Path(image_paths[idx]).name}"
+        )
+        save_four_panel(
+            bucket_dirs[bucket] / fname,
+            rgb_images[idx],
+            gt_masks[idx],
+            maps[idx],
+            title=title,
+        )
 
     return metrics
