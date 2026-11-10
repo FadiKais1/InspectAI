@@ -24,9 +24,15 @@ feature_layers:
 input_size: 512
 k_neighbors: 1
 max_memory_patches: 10000
+candidate_pool_size: 50000
 seed: 42
 image_score: spatial_max
-coreset: greedy_farthest_point
+coreset: deterministic_presample_then_greedy_farthest_point
+coreset_note: >
+  Pre-evaluation computational amendment (before any official test metrics):
+  greedy FPS on all ~872k layer2 patches at 512 was infeasible on local CPU.
+  Deterministically pre-sample at most 50,000 candidates (seed 42), then run
+  the same projected greedy farthest-point selection to 10,000 memory vectors.
 projection_dim: 128
 projection: gaussian
 interpolation: bilinear

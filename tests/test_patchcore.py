@@ -12,6 +12,7 @@ from inspectai.models.patchcore import (
     PatchCoreConfig,
     PatchCoreScorer,
     align_and_concat,
+    deterministic_candidate_pool,
     greedy_farthest_point_indices,
     nearest_neighbor_l2,
 )
@@ -54,6 +55,33 @@ def test_resnet_layer2_layer3_shapes() -> None:
     assert fused.shape == (1, 384, 8, 8)
 
 
+def test_candidate_pool_is_deterministic_and_capped() -> None:
+    a = deterministic_candidate_pool(80_000, 50_000, seed=42)
+    b = deterministic_candidate_pool(80_000, 50_000, seed=42)
+    c = deterministic_candidate_pool(80_000, 50_000, seed=0)
+    assert np.array_equal(a, b)
+    assert not np.array_equal(a, c)
+    assert len(a) == 50_000
+    assert len(set(a.tolist())) == 50_000
+    small = deterministic_candidate_pool(100, 50_000, seed=42)
+    assert len(small) == 100
+    assert np.array_equal(small, np.arange(100))
+
+
+def test_presample_then_fps_is_deterministic_and_capped() -> None:
+    rng = np.random.default_rng(1)
+    raw = rng.standard_normal((200, 16)).astype(np.float32)
+    pool_a = deterministic_candidate_pool(len(raw), 80, seed=42)
+    pool_b = deterministic_candidate_pool(len(raw), 80, seed=42)
+    assert np.array_equal(pool_a, pool_b)
+    fps_a = greedy_farthest_point_indices(raw[pool_a], 25, seed=42, projection_dim=8)
+    fps_b = greedy_farthest_point_indices(raw[pool_a], 25, seed=42, projection_dim=8)
+    assert np.array_equal(fps_a, fps_b)
+    selected = pool_a[fps_a]
+    assert len(selected) == 25
+    assert len(set(selected.tolist())) == 25
+
+
 def test_coreset_is_deterministic_and_capped() -> None:
     rng = np.random.default_rng(0)
     features = rng.standard_normal((50, 16)).astype(np.float32)
@@ -78,9 +106,11 @@ def test_nearest_neighbor_and_scorer_cpu() -> None:
     cfg = PatchCoreConfig(input_size=16, max_memory_patches=20, projection_dim=8)
     scorer = PatchCoreScorer(TinyFusedEncoder(), config=cfg)
     train = [torch.full((3, 16, 16), 40, dtype=torch.uint8) for _ in range(3)]
-    scorer.fit(train)
+    scorer.fit(train, log=None)
     assert scorer.memory is not None
     assert scorer.memory.shape[0] <= 20
+    assert scorer.n_pool_patches <= scorer.config.candidate_pool_size
+    assert scorer.memory.shape[0] <= scorer.config.max_memory_patches
     score, amap = scorer.score_image(train[0], (16, 16))
     assert isinstance(score, float)
     assert amap.shape == (16, 16)

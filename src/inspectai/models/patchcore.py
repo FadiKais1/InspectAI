@@ -5,6 +5,7 @@ Does not change Milestone 4 PatchKNNScorer behavior.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 
 import numpy as np
@@ -24,6 +25,7 @@ class PatchCoreConfig:
     input_size: int = 512
     k_neighbors: int = 1
     max_memory_patches: int = 10_000
+    candidate_pool_size: int = 50_000
     seed: int = 42
     image_score: str = "spatial_max"
     projection_dim: int = 128
@@ -80,14 +82,35 @@ class FrozenResNetMultiScaleEncoder(nn.Module):
         return align_and_concat(layer2, layer3)
 
 
+def deterministic_candidate_pool(
+    n_raw: int,
+    pool_size: int,
+    seed: int = 42,
+) -> np.ndarray:
+    """Choose at most ``pool_size`` indices from ``0..n_raw-1`` with ``seed``."""
+    if n_raw < 1:
+        raise ValueError("n_raw must be >= 1")
+    if pool_size < 1:
+        raise ValueError("pool_size must be >= 1")
+    if n_raw <= pool_size:
+        return np.arange(n_raw, dtype=np.int64)
+    rng = np.random.default_rng(seed)
+    return rng.choice(n_raw, size=pool_size, replace=False).astype(np.int64)
+
+
 def greedy_farthest_point_indices(
     features: np.ndarray,
     n_select: int,
     *,
     seed: int = 42,
     projection_dim: int = 128,
+    progress_every: int = 1000,
+    log: Callable[[str], None] | None = None,
 ) -> np.ndarray:
-    """Deterministic greedy FPS in a fixed Gaussian random-projection space."""
+    """Deterministic greedy FPS in a fixed Gaussian random-projection space.
+
+    Ranking uses squared L2 in the projected space (monotone in L2, no sqrt).
+    """
     if features.ndim != 2:
         raise ValueError("features must be (N, D)")
     n_samples, dim = features.shape
@@ -102,20 +125,29 @@ def greedy_farthest_point_indices(
     projected = features.astype(np.float32, copy=False) @ proj
     norms = np.linalg.norm(projected, axis=1, keepdims=True)
     projected = projected / np.clip(norms, 1e-8, None)
+    row_sq = np.sum(projected * projected, axis=1)
 
     start = int(rng.integers(0, n_samples))
     selected = np.empty(n_select, dtype=np.int64)
     selected[0] = start
-    min_dist = np.full(n_samples, np.inf, dtype=np.float64)
+    min_dist_sq = np.full(n_samples, np.inf, dtype=np.float64)
     last = projected[start]
+    if log is not None:
+        log("starting coreset selection")
+        log("coreset progress: 1/" + str(n_select))
     for i in range(1, n_select):
-        diff = projected - last
-        dist = np.sqrt(np.sum(diff * diff, axis=1))
-        np.minimum(min_dist, dist, out=min_dist)
-        min_dist[selected[:i]] = -np.inf
-        nxt = int(np.argmax(min_dist))
+        last_sq = float(np.dot(last, last))
+        dist_sq = row_sq + last_sq - 2.0 * (projected @ last)
+        np.minimum(min_dist_sq, dist_sq, out=min_dist_sq)
+        min_dist_sq[selected[:i]] = -np.inf
+        nxt = int(np.argmax(min_dist_sq))
         selected[i] = nxt
         last = projected[nxt]
+        chosen = i + 1
+        if log is not None and (chosen % progress_every == 0 or chosen == n_select):
+            log(f"coreset progress: {chosen}/{n_select}")
+    if log is not None:
+        log("coreset complete")
     return selected
 
 
@@ -159,6 +191,7 @@ class PatchCoreScorer:
         self.memory: np.ndarray | None = None
         self.coreset_indices: np.ndarray | None = None
         self.n_candidate_patches: int = 0
+        self.n_pool_patches: int = 0
 
     @torch.no_grad()
     def extract_feature_map(self, image_uint8_chw: torch.Tensor) -> torch.Tensor:
@@ -174,19 +207,45 @@ class PatchCoreScorer:
         patches = feats[0].permute(1, 2, 0).reshape(height * width, channels).cpu().numpy()
         return np.asarray(patches, dtype=np.float32)
 
-    def fit(self, images: list[torch.Tensor]) -> None:
-        banks = [self.extract_patches(image) for image in images]
+    def fit(
+        self,
+        images: list[torch.Tensor],
+        *,
+        log: Callable[[str], None] | None = print,
+    ) -> None:
+        if log is not None:
+            log("extracting training features")
+        banks = []
+        n_images = len(images)
+        for i, image in enumerate(images, start=1):
+            banks.append(self.extract_patches(image))
+            if log is not None and (i % 10 == 0 or i == n_images):
+                log(f"extracting training features {i}/{n_images}")
         candidates = np.concatenate(banks, axis=0)
         self.n_candidate_patches = int(candidates.shape[0])
-        cap = self.config.max_memory_patches
-        indices = greedy_farthest_point_indices(
-            candidates,
-            min(cap, candidates.shape[0]),
+        if log is not None:
+            log(f"number of raw candidate patches: {self.n_candidate_patches}")
+
+        pool_idx = deterministic_candidate_pool(
+            self.n_candidate_patches,
+            self.config.candidate_pool_size,
+            seed=self.config.seed,
+        )
+        pool = candidates[pool_idx]
+        self.n_pool_patches = int(pool.shape[0])
+        if log is not None:
+            log(f"candidate pre-pool completed: {self.n_pool_patches}")
+
+        cap = min(self.config.max_memory_patches, pool.shape[0])
+        local_idx = greedy_farthest_point_indices(
+            pool,
+            cap,
             seed=self.config.seed,
             projection_dim=self.config.projection_dim,
+            log=log,
         )
-        self.coreset_indices = indices
-        memory = candidates[indices]
+        self.coreset_indices = pool_idx[local_idx]
+        memory = candidates[self.coreset_indices]
         norms = np.linalg.norm(memory, axis=1, keepdims=True)
         self.memory = memory / np.clip(norms, 1e-8, None)
 
@@ -208,10 +267,12 @@ class PatchCoreScorer:
     def memory_metadata(self) -> dict:
         return {
             "n_candidate_patches": self.n_candidate_patches,
+            "n_pool_patches": self.n_pool_patches,
             "n_memory_patches": 0 if self.memory is None else int(self.memory.shape[0]),
             "feature_dim": 0 if self.memory is None else int(self.memory.shape[1]),
             "max_memory_patches": self.config.max_memory_patches,
+            "candidate_pool_size": self.config.candidate_pool_size,
             "projection_dim": self.config.projection_dim,
             "seed": self.config.seed,
-            "coreset": "greedy_farthest_point",
+            "coreset": "deterministic_presample_then_greedy_farthest_point",
         }

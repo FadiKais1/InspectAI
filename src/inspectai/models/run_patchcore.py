@@ -50,7 +50,9 @@ def run_patchcore(
     pixel_scores: list[np.ndarray] = []
     pixel_masks: list[np.ndarray] = []
 
-    for i in range(len(test)):
+    print("starting official test scoring")
+    n_test = len(test)
+    for i in range(n_test):
         item = test[i]
         native_hw = (int(item["image"].shape[1]), int(item["image"].shape[2]))
         score, score_map = scorer.score_image(item["image"], native_hw)
@@ -63,6 +65,9 @@ def run_patchcore(
         image_paths.append(str(item["image_path"]))
         pixel_scores.append(score_map.ravel())
         pixel_masks.append(item["mask"].cpu().numpy().ravel())
+        done = i + 1
+        if done % 10 == 0 or done == n_test:
+            print(f"test progress: {done}/{n_test}")
 
     y = np.asarray(labels)
     s = np.asarray(image_scores)
@@ -78,6 +83,7 @@ def run_patchcore(
             "input_size": cfg.input_size,
             "k_neighbors": cfg.k_neighbors,
             "max_memory_patches": cfg.max_memory_patches,
+            "candidate_pool_size": cfg.candidate_pool_size,
             "seed": cfg.seed,
             "image_score": cfg.image_score,
             "projection_dim": cfg.projection_dim,
