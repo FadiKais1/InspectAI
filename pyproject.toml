@@ -20,6 +20,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest", "ruff"]
 torch = ["torch", "torchvision"]
+dinov3 = ["torch", "torchvision", "transformers"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

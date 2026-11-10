@@ -1,0 +1,45 @@
+# Milestone 7 — frozen DINOv3 ViT-S/16 patch-feature anomaly detection
+#
+# Hypothesis
+# ----------
+# Frozen DINOv3 patch embeddings may provide richer local and structural
+# representations than supervised ImageNet ResNet18 features, potentially
+# improving pixel-level localization while keeping strong image-level
+# detection. Training/fitting uses train/good only.
+#
+# Official backbone (do not substitute)
+# -------------------------------------
+# Hugging Face model id:
+#   facebook/dinov3-vits16-pretrain-lvd1689m
+# Architecture: ViT-S/16 (patch_size=16, hidden size 384, 4 register tokens)
+# Loading (official transformers API):
+#   AutoImageProcessor.from_pretrained("facebook/dinov3-vits16-pretrain-lvd1689m")
+#   AutoModel.from_pretrained("facebook/dinov3-vits16-pretrain-lvd1689m")
+# License: DINOv3 License (gated on Hugging Face). Accept the license on the
+# model card, then `huggingface-cli login`, before weights can download.
+# If access is denied, stop; do not fall back to DINOv2 or ResNet.
+#
+# Preprocessing: official AutoImageProcessor normalization. Images are resized
+# to 512x512 (divisible by 16) before the processor; do_resize=False so the
+# checkpoint's 224 default size is not applied. Resolution is locked at 512.
+#
+# Representation: spatial patch tokens only (drop CLS and register tokens),
+# L2-normalized. Memory: deterministic random sample, seed 42.
+# Do not retune after seeing official test metrics.
+
+category: transistor
+split_train: train
+split_test: test
+input_size: 512
+backbone: facebook/dinov3-vits16-pretrain-lvd1689m
+backbone_frozen: true
+patch_size: 16
+register_tokens: 4
+embedding_dim: 384
+candidate_pool_size: 50000
+final_memory_size: 10000
+seed: 42
+k: 1
+image_score: spatial_max
+upsample: bilinear
+output_dir: outputs/experiments/m7_transistor_dinov3
