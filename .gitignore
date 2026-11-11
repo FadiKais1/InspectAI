@@ -40,6 +40,14 @@ outputs/checkpoints/*
 outputs/experiments/*
 !outputs/experiments/.gitkeep
 
+# Saved inference memory (rebuild locally; do not commit banks/weights)
+outputs/artifacts/*
+!outputs/artifacts/.gitkeep
+
+# Demo CLI / Streamlit exports
+outputs/demo/*
+!outputs/demo/.gitkeep
+
 # Tooling / OS
 .pytest_cache/
 .ruff_cache/
