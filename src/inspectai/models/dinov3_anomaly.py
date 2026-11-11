@@ -259,6 +259,23 @@ class DINOv3PatchScorer:
         if log is not None:
             log(f"final memory size: {self.memory.shape[0]}")
 
+    def load_fitted_memory(
+        self,
+        memory: np.ndarray,
+        *,
+        grid_hw: tuple[int, int],
+        n_candidate_patches: int | None = None,
+        n_pool_patches: int | None = None,
+    ) -> None:
+        """Attach a previously saved memory bank. Does not refit from images."""
+        bank = np.asarray(memory, dtype=np.float32)
+        if bank.ndim != 2:
+            raise ValueError("memory must be (N, D)")
+        self.memory = bank
+        self.grid_hw = (int(grid_hw[0]), int(grid_hw[1]))
+        self.n_candidate_patches = n_candidate_patches
+        self.n_pool_patches = n_pool_patches
+
     def score_image(
         self,
         image_uint8_chw: torch.Tensor,
