@@ -42,3 +42,22 @@ outputs/                Figures, checkpoints, experiment runs
 Requires Python 3.11 or newer. Runtime packages are pandas, NumPy, Pillow, and
 Matplotlib. PyTorch is an optional extra (``pip install inspectai[torch]``) used
 by the thin ``MVTecTorchDataset`` adapter; it is not required for NumPy loading.
+
+## Streamlit demo
+
+The interactive demo uses a **saved** DINOv3 memory artifact. It does not
+rebuild the train/good memory bank.
+
+1. Build the artifact (once):
+
+```text
+python scripts/build_dinov3_memory.py --root data/raw --category transistor --output outputs/artifacts/dinov3_transistor
+```
+
+2. Launch the app:
+
+```text
+streamlit run app/streamlit_app.py
+```
+
+3. Upload a PNG or JPEG image and click **Inspect Image**.

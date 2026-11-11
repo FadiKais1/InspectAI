@@ -21,9 +21,16 @@ dependencies = [
 dev = ["pytest", "ruff"]
 torch = ["torch", "torchvision"]
 dinov3 = ["torch", "torchvision", "transformers"]
+demo = ["streamlit"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.ruff]
+src = ["src", "tests", "app"]
+
+[tool.ruff.lint.per-file-ignores]
+"app/streamlit_app.py" = ["E402"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
